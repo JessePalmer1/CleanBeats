@@ -3,6 +3,15 @@ from django.contrib.auth import login as auth_login, authenticate, logout as aut
 from .forms import CustomUserCreationForm, CustomErrorList
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.urls import reverse
+from django.utils import timezone
+from datetime import timedelta
+import requests
+from .models import SpotifyToken
+from urllib.parse import urlencode
+
+
 @login_required
 def logout(request):
     auth_logout(request)
@@ -42,4 +51,65 @@ def signup(request):
             template_data['form'] = form
             return render(request, 'accounts/signup.html',
                 {'template_data': template_data})
+
+
+@login_required
+def connect_spotify(request):
+    """Redirect the logged-in user to Spotify's authorization page."""
+    scopes = "playlist-read-private playlist-read-collaborative"
+    params = {
+        'client_id': settings.SPOTIFY_CLIENT_ID,
+        'response_type': 'code',
+        'redirect_uri': settings.SPOTIFY_REDIRECT_URI,
+        'scope': scopes,
+        'show_dialog': 'true',
+    }
+    auth_url = 'https://accounts.spotify.com/authorize?' + urlencode(params)
+    return redirect(auth_url)
+
+
+def spotify_callback(request):
+    """Handle Spotify redirect with a code and exchange it for tokens."""
+    error = request.GET.get('error')
+    code = request.GET.get('code')
+    if error:
+        # Could render an error template; for now redirect home
+        return redirect('home.index')
+    if not code:
+        return redirect('home.index')
+
+    token_url = 'https://accounts.spotify.com/api/token'
+    data = {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': settings.SPOTIFY_REDIRECT_URI,
+        'client_id': settings.SPOTIFY_CLIENT_ID,
+        'client_secret': settings.SPOTIFY_CLIENT_SECRET,
+    }
+    r = requests.post(token_url, data=data)
+    if r.status_code != 200:
+        return redirect('home.index')
+    token_data = r.json()
+    access_token = token_data.get('access_token')
+    refresh_token = token_data.get('refresh_token')
+    expires_in = token_data.get('expires_in')  # seconds
+    scope = token_data.get('scope', '')
+
+    # If user is authenticated, save tokens to DB; otherwise store in session
+    if request.user.is_authenticated:
+        expires_at = timezone.now() + timedelta(seconds=expires_in) if expires_in else None
+        SpotifyToken.objects.update_or_create(
+            user=request.user,
+            defaults={
+                'access_token': access_token,
+                'refresh_token': refresh_token,
+                'scope': scope,
+                'expires_at': expires_at,
+            }
+        )
+        return redirect('home.index')
+    else:
+        # Not logged in: store token data in session and prompt user to login/signup
+        request.session['spotify_oauth'] = token_data
+        return redirect('accounts.login')
 # Create your views here.
