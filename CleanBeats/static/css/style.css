@@ -1,0 +1,101 @@
+.bg-index{
+  background: url("/static/img/background.jpeg") no-repeat fixed;
+  background-size: 100% auto;
+}
+
+/* Dark theme support */
+body.bg-dark {
+  background-color: #121212 !important;
+}
+
+.navbar-dark {
+  background-color: #000000 !important;
+}
+
+/* Spotify green theme */
+:root {
+  --spotify-green: #1DB954;
+  --spotify-green-hover: #1ed760;
+  --spotify-green-dark: #169c46;
+}
+
+/* Dark theme navbar links with Spotify green accents */
+.navbar-dark .nav-link {
+  color: #ffffff !important;
+  transition: color 0.3s ease;
+}
+
+.navbar-dark .nav-link:hover {
+  color: var(--spotify-green) !important;
+}
+
+.navbar-dark .navbar-brand {
+  color: var(--spotify-green) !important;
+  font-weight: bold;
+}
+
+/* Dark theme form styling with Spotify green accents */
+.bg-dark label {
+  color: #ffffff !important;
+}
+
+.bg-dark .form-control {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  color: #ffffff !important;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bg-dark .form-control:focus {
+  background-color: #6c757d !important;
+  border-color: var(--spotify-green) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 0.2rem rgba(29, 185, 84, 0.25) !important;
+}
+
+/* Spotify green buttons */
+.btn-spotify {
+  background-color: var(--spotify-green) !important;
+  border-color: var(--spotify-green) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-spotify:hover {
+  background-color: var(--spotify-green-hover) !important;
+  border-color: var(--spotify-green-hover) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+/* Update existing dark buttons to use Spotify green */
+.btn.bg-dark {
+  background-color: var(--spotify-green) !important;
+  border-color: var(--spotify-green) !important;
+}
+
+.btn.bg-dark:hover {
+  background-color: var(--spotify-green-hover) !important;
+  border-color: var(--spotify-green-hover) !important;
+}
+
+/* Fix card footer background to match card body */
+.card.bg-dark .card-footer {
+  background-color: #6c757d !important;
+}
+
+/* Remove card rounding */
+.card {
+  border-radius: 0 !important;
+}
+
+.card .card-img-top {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.card .card-footer {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}

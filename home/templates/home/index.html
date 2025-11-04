@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<header class="masthead bg-index text-white text-center py-4">
+  <div class="container d-flex align-items-center flex-column pt-2">
+    <h2>CleanBeats</h2>
+    <p>Tune your music playlist to perfection</p>
+  </div>
+</header>
+<div class="p-3">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col mx-auto text-center mb-3">
+        <h4>Welcome to CleanBeats!</h4>
+      </div>
+    </div>
+    
+    <!-- Login and Create Account Cards -->
+    <div class="row mt-4 justify-content-center">
+      <div class="col-md-4 mb-3">
+        <div class="card bg-dark text-white h-100 shadow">
+          <div class="card-body text-center d-flex flex-column">
+            <i class="fas fa-sign-in-alt fa-3x mb-3" style="color: var(--spotify-green);"></i>
+            <h5 class="card-title">Login</h5>
+            <p class="card-text flex-grow-1">Already have an account? Sign in to access your playlists and fine-tune them.</p>
+            <a href="{% url 'accounts.login' %}" class="btn btn-spotify mt-auto">Login</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-3">
+        <div class="card bg-dark text-white h-100 shadow">
+          <div class="card-body text-center d-flex flex-column">
+            <i class="fas fa-user-plus fa-3x mb-3" style="color: var(--spotify-green);"></i>
+            <h5 class="card-title">Create Account</h5>
+            <p class="card-text flex-grow-1">New to CleanBeats? Create an account and link it to your Spotify account.</p>
+            <a href="{% url 'accounts.signup' %}" class="btn btn-spotify mt-auto">Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
