@@ -8,10 +8,17 @@
     {% endif %}
 
     {% if playlists %}
+<<<<<<< HEAD
         <div class="row row-cols-1 row-cols-md-3 g-4">
             {% for p in playlists %}
             <div class="col">
                 <div class="card h-100 shadow-sm bg-dark text-white">
+=======
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for p in playlists %}
+            <div class="col">
+                <div class="card h-50 shadow-sm bg-dark text-white">
+>>>>>>> main
                     <img src="{{ p.images.0.url|default:'/static/img/placeholder.png' }}" class="card-img-top" alt="Playlist cover">
                     <div class="card-body">
                         <h5 class="card-title">{{ p.name }}</h5>
@@ -20,10 +27,20 @@
                             Owner: {{ p.owner.display_name }}
                         </p>
                     </div>
+<<<<<<< HEAD
                     <div class="card-footer bg-dark text-white border-0">
                         <a href="{{ p.external_urls.spotify }}" target="_blank" class="btn btn-outline-success w-100">
                             Open in Spotify
                         </a>
+=======
+                    <div class="card-footer text-white border-0">
+                        <a href="{{ p.external_urls.spotify }}" target="_blank" class="btn btn-outline-success w-50">
+                            Open in Spotify
+                        </a>
+                        <a href="{% url 'playlists.edit' %}" target="_blank" class="btn btn-outline-success w-100">
+                            Edit PlayList
+                        </a>
+>>>>>>> main
                     </div>
                 </div>
             </div>

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5 text-center">
+    <h2 class="mb-4">{{ playlist_name }}</h2>
+
+    {% if songs %}
+        <div class="song-stack position-relative mx-auto" style="height: 500px; max-width: 400px;">
+            {% for song in songs %}
+            <div class="card song-card shadow-lg position-absolute top-0 start-50 translate-middle-x" 
+                 style="width: 100%; height: 100%; transition: all 0.3s ease; {% if not forloop.last %}z-index: {{ forloop.revcounter }};{% endif %}">
+                
+                <!-- Song image -->
+                <img src="{{ song.image_url|default:'/static/img/placeholder.png' }}" 
+                     class="card-img-top" 
+                     alt="Song cover" 
+                     style="height: 70%; object-fit: cover;">
+                
+                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                    <h4 class="card-title">{{ song.name }}</h4>
+
+                    <!-- Artists -->
+                    {% if song.artists %}
+                        <p class="text-muted mb-2">
+                            {{ song.artists|join:", " }}
+                        </p>
+                    {% endif %}
+
+                    <!-- Audio preview -->
+                    {% if song.preview_url %}
+                        <audio controls style="width: 90%;">
+                            <source src="{{ song.preview_url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    {% else %}
+                        <!-- Fallback link to Spotify -->
+                        <a href="{{ song.spotify_url }}" target="_blank" class="btn btn-outline-success mt-2">
+                            ▶ Listen on Spotify
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-between mt-4" style="max-width: 400px; margin: auto;" id="action-buttons">
+            <button class="btn btn-danger btn-lg remove-btn" style="width: 48%; font-size: 1.5rem;">✖</button>
+            <button class="btn btn-success btn-lg keep-btn" style="width: 48%; font-size: 1.5rem;">✔</button>
+        </div>
+    {% else %}
+        <p class="text-muted">No songs found in this playlist.</p>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const stack = document.querySelector('.song-stack');
+    const actionButtons = document.getElementById('action-buttons');
+
+    function getCards() {
+        const cards = stack.querySelectorAll('.song-card');
+        if (cards.length === 0 && actionButtons) {
+            actionButtons.style.display = 'none';
+        }
+        return cards;
+    }
+
+    function removeCard(card, direction = 'right') {
+        card.style.transform = direction === 'right'
+            ? 'translateX(500px) rotate(20deg)'
+            : 'translateX(-500px) rotate(-20deg)';
+        card.style.opacity = 0;
+        setTimeout(() => {
+            card.remove();
+            getCards();
+        }, 300);
+    }
+
+    const keepBtn = document.querySelector('.keep-btn');
+    const removeBtn = document.querySelector('.remove-btn');
+
+    keepBtn.addEventListener('click', () => {
+        const cards = getCards();
+        if (cards.length) removeCard(cards[0], 'right');
+    });
+
+    removeBtn.addEventListener('click', () => {
+        const cards = getCards();
+        if (cards.length) removeCard(cards[0], 'left');
+    });
+});
+</script>
+
+<style>
+.song-card {
+    cursor: grab;
+}
+.song-card img {
+    border-bottom: 1px solid #ddd;
+}
+</style>
+{% endblock %}

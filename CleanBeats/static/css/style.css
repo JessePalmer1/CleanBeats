@@ -78,4 +78,27 @@ body.bg-dark {
 .btn.bg-dark:hover {
   background-color: var(--spotify-green-hover) !important;
   border-color: var(--spotify-green-hover) !important;
+<<<<<<< HEAD
+=======
+}
+
+/* Fix card footer background to match card body */
+.card.bg-dark .card-footer {
+  background-color: #6c757d !important;
+}
+
+/* Remove card rounding */
+.card {
+  border-radius: 0 !important;
+}
+
+.card .card-img-top {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.card .card-footer {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+>>>>>>> main
 }
